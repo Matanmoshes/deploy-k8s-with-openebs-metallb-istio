@@ -1,0 +1,85 @@
+
+# ls -l /dev/disk/by-id/ | grep nvme
+# kubectl label diskpool pool-on-node-1 topology-key=topology-value -n openebs
+
+cat <<EOF | kubectl apply -f -
+apiVersion: openebs.io/v1beta2
+kind: DiskPool
+metadata:
+  name: pool-on-node-3
+  namespace: openebs
+spec:
+  node: ip-10-0-1-119
+  disks:
+    - uring:///dev/disk/by-id/nvme-Amazon_Elastic_Block_Store_vol0af3865c7321d7fed
+EOF
+
+---
+
+cat <<EOF | kubectl create -f -
+apiVersion: "openebs.io/v1beta2"
+kind: DiskPool
+metadata:
+  name: pool-on-node-1
+  namespace: openebs
+spec:
+  node: workernode-1-hostname
+  disks: ["aio:///dev/disk/by-id/<id>"]
+  topology:
+    labelled:
+      topology-key: topology-value
+EOF
+
+
+---
+
+
+cat <<EOF | kubectl create -f -
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: mayastor-3
+parameters:
+  protocol: nvmf
+  repl: "3"
+provisioner: io.openebs.csi-mayastor
+EOF
+
+---
+
+cat <<EOF | kubectl create -f -
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ms-volume-claim
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: mayastor-3
+EOF
+
+---
+
+kind: Pod
+apiVersion: v1
+metadata:
+  name: fio
+spec:
+  nodeSelector:
+    openebs.io/engine: mayastor
+  volumes:
+    - name: ms-volume
+      persistentVolumeClaim:
+        claimName: ms-volume-claim
+  containers:
+    - name: fio
+      image: nixery.dev/shell/fio
+      args:
+        - sleep
+        - "1000000"
+      volumeMounts:
+        - mountPath: "/volume"
+          name: ms-volume

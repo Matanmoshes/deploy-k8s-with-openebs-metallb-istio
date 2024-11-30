@@ -1,0 +1,65 @@
+# openebs-values.yaml
+
+ndm:
+  enabled: true
+
+mayastor:
+  enabled: true
+  image:
+    registry: docker.io
+    repo: openebs
+    tag: v2.7.1  # Update to the version you are using
+    pullPolicy: IfNotPresent
+
+  ioEngine:
+    resources:
+      requests:
+        cpu: "2"              # Adjusted
+        memory: "512Mi"       # Adjusted
+        hugepages-2Mi: "1Gi"  # Adjusted
+      limits:
+        cpu: "1.5"            # Adjusted
+        memory: "768Mi"       # Adjusted
+        hugepages-2Mi: "1Gi"  # Adjusted
+
+  # Additional configurations
+  csiNode:
+    resources:
+      requests:
+        cpu: "50m"
+        memory: "50Mi"
+      limits:
+        cpu: "100m"
+        memory: "100Mi"
+  csiController:
+    resources:
+      requests:
+        cpu: "16m"
+        memory: "64Mi"
+      limits:
+        cpu: "32m"
+        memory: "128Mi"
+  apiRest:
+    resources:
+      requests:
+        cpu: "25m"
+        memory: "32Mi"
+      limits:
+        cpu: "50m"
+        memory: "64Mi"
+  agentCore:
+    resources:
+      requests:
+        cpu: "250m"
+        memory: "64Mi"
+      limits:
+        cpu: "500m"
+        memory: "128Mi"
+  operatorDiskpool:
+    resources:
+      requests:
+        cpu: "25m"
+        memory: "16Mi"
+      limits:
+        cpu: "50m"
+        memory: "32Mi"

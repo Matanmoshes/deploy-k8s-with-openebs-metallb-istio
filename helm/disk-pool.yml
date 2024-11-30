@@ -1,0 +1,10 @@
+apiVersion: mayastor.io/v1alpha1
+kind: DiskPool
+metadata:
+  name: mayastor-diskpool
+  namespace: openebs
+spec:
+  nodeSelector:
+    openebs.io/engine: mayastor
+  disks:
+    - /dev/nvme1n1   # Replace with your actual disk device path

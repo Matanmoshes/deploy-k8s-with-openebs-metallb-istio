@@ -1,0 +1,65 @@
+# openebs-values.yaml.bacl
+engines:
+  defaultconfig:
+    ndm:
+      enabled: true
+  replicated:
+    mayastor:
+      enabled: true
+
+mayastorControlPlane:
+  defaultReplicas: 3
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "64Mi"
+    limits:
+      cpu: "250m"
+      memory: "128Mi"
+
+mayastorDataPlane:
+  resources:
+    ioEngine:
+      requests:
+        cpu: "500m"
+        memory: "1Gi"
+        hugepages-2Mi: "1Gi"
+      limits:
+        cpu: "2"
+        memory: "2Gi"
+        hugepages-2Mi: "2Gi"
+    csiNode:
+      requests:
+        cpu: "50m"
+        memory: "50Mi"
+      limits:
+        cpu: "100m"
+        memory: "100Mi"
+    csiController:
+      requests:
+        cpu: "16m"
+        memory: "64Mi"
+      limits:
+        cpu: "32m"
+        memory: "128Mi"
+    apiRest:
+      requests:
+        cpu: "25m"
+        memory: "32Mi"
+      limits:
+        cpu: "50m"
+        memory: "64Mi"
+    agentCore:
+      requests:
+        cpu: "250m"
+        memory: "64Mi"
+      limits:
+        cpu: "500m"
+        memory: "128Mi"
+    operatorDiskpool:
+      requests:
+        cpu: "25m"
+        memory: "16Mi"
+      limits:
+        cpu: "50m"
+        memory: "32Mi"

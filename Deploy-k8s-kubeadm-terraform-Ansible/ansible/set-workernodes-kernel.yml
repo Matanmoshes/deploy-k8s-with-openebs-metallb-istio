@@ -1,0 +1,76 @@
+---
+- name: Configure Worker Nodes for OpenEBS
+  hosts: worker_nodes
+  become: yes
+  tasks:
+    # Verify Kernel Version
+    - name: Check kernel version
+      command: uname -r
+      register: kernel_version
+    - name: Display kernel version
+      debug:
+        msg: "Kernel version: {{ kernel_version.stdout }}"
+
+    # Install Kernel Extra Modules
+    - name: Install kernel extra modules package
+      apt:
+        name: linux-modules-extra-{{ ansible_kernel }}
+        state: present
+      when: ansible_kernel is version("5.13", ">=")
+
+    # Load and Verify nvme_tcp Kernel Module
+    - name: Load nvme_tcp kernel module
+      modprobe:
+        name: nvme_tcp
+        state: present
+    - name: Ensure nvme_tcp module loads on boot
+      lineinfile:
+        path: /etc/modules
+        line: "nvme_tcp"
+        state: present
+    - name: Verify nvme_tcp module is loaded
+      shell: lsmod | grep nvme_tcp
+      register: nvme_tcp_loaded
+      changed_when: false
+    - name: Display nvme_tcp module status
+      debug:
+        msg: "nvme_tcp module loaded: {{ nvme_tcp_loaded.stdout }}"
+
+    # Verify CPU Supports SSE4.2
+    - name: Check CPU for SSE4.2 support
+      shell: grep sse4_2 /proc/cpuinfo
+      register: sse4_2_check
+      changed_when: false
+    - name: Display SSE4.2 support
+      debug:
+        msg: "SSE4.2 support: {{ sse4_2_check.stdout_lines }}"
+
+    # Install Necessary Packages
+    - name: Install required packages
+      apt:
+        name:
+          - lsscsi
+          - nvme-cli
+        state: present
+
+    # Configure HugePages
+    - name: Check current HugePages configuration
+      shell: grep HugePages /proc/meminfo
+      register: hugepages_check
+      changed_when: false
+    - name: Display current HugePages configuration
+      debug:
+        msg: "{{ hugepages_check.stdout_lines }}"
+    - name: Configure HugePages
+      lineinfile:
+        path: /etc/sysctl.conf
+        line: "vm.nr_hugepages=1024"
+        state: present
+    - name: Apply HugePages configuration
+      shell: sysctl -p
+
+    # Restart Kubelet
+    - name: Restart kubelet service
+      systemd:
+        name: kubelet
+        state: restarted
