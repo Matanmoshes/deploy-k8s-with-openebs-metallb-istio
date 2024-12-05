@@ -6,6 +6,8 @@
 terraform.tfstate
 terraform.tfstate.backup
 
+pv-disk.yml
+
 # Sensitive and personal information
 *.tfvars
 *.tfvars.json
