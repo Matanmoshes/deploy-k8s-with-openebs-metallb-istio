@@ -1,4 +1,4 @@
-# Comprehensive Guide to Setting Up OpenEBS Replicated Persistent Volumes with MetalLB and Istio on Kubernetes
+# Guide Setting Up OpenEBS Replicated Persistent Volumes with MetalLB and Istio on Kubernetes
 
 This guide will walk you through the process of setting up a Kubernetes cluster enhanced with **OpenEBS** for replicated Persistent Volumes (PVs), **MetalLB** for load balancing, **Istio** for service mesh capabilities, and the **Metrics Server** and **Kubernetes Dashboard** for cluster monitoring. By following these steps, you'll achieve a robust, high-availability storage solution leveraging AWS EBS volumes, along with advanced networking features.
 
