@@ -19,7 +19,7 @@ This guide will walk you through the process of setting up a Kubernetes cluster 
 
 ## 1. Introduction
 
-In this guide, I will walk through setting up a Kubernetes cluster with enhanced storage and networking capabilities. We will:
+In this guide, I will walk through setting up a Kubernetes cluster with enhanced storage and networking capabilities. you will:
 
 - **Install OpenEBS with Mayastor** for high-performance, replicated Persistent Volumes.
 - **Deploy the Metrics Server and Kubernetes Dashboard** for real-time monitoring and management.
@@ -32,7 +32,7 @@ This setup is ideal for creating a robust, scalable, and highly available Kubern
 
 ## 2. Prerequisites
 
-Before we begin, ensure the following prerequisites are met:
+Before you begin, ensure the following prerequisites are met:
 
 - **Kubernetes Cluster**: Set up using the `Deploy-k8s-kubeadm-terraform-Ansible` repository. Please refer to the `README.md` file inside this folder for detailed instructions on creating and running the Terraform and Ansible scripts.
 
@@ -60,7 +60,7 @@ Before we begin, ensure the following prerequisites are met:
 
 ## 3. Installing OpenEBS with Mayastor
 
-OpenEBS provides cloud-native storage for Kubernetes, and Mayastor offers high-performance storage engines. We'll install OpenEBS and configure Mayastor for replicated PVs.
+OpenEBS provides cloud-native storage for Kubernetes, and Mayastor offers high-performance storage engines. you will install OpenEBS and configure Mayastor for replicated PVs.
 
 ### 3.1 Prepare Worker Nodes
 
@@ -685,14 +685,14 @@ You should see the Bookinfo application interface.
 
 ## 7. Conclusion
 
-By following this guide, we have successfully:
+By following this guide, you have successfully:
 
 - **Installed and configured OpenEBS with Mayastor** to provide high-performance, replicated Persistent Volumes.
 - **Deployed the Metrics Server and Kubernetes Dashboard** for monitoring and managing the cluster.
 - **Configured MetalLB** to enable LoadBalancer services in our bare-metal Kubernetes cluster.
 - **Installed Istio** to provide advanced service mesh capabilities, enhancing traffic management and observability.
 
-Our Kubernetes cluster is now equipped with robust storage solutions, monitoring tools, load balancing, and service mesh features, ready to support scalable and resilient applications.
+Your Kubernetes cluster is now equipped with robust storage solutions, monitoring tools, load balancing, and service mesh features, ready to support scalable and resilient applications.
 
 ---
 
