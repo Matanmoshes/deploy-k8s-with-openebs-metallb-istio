@@ -9,5 +9,5 @@ runcmd:
   - add-apt-repository --yes --update ppa:ansible/ansible
   - apt-get install -y ansible
   - ansible --version
-  - git clone https://github.com/Matanmoshes/aws-k8s-terraform-automation.git /home/ubuntu/aws-k8s-terraform-automation
-  - chown -R ubuntu:ubuntu /home/ubuntu/aws-k8s-terraform-automation
+  - git clone https://github.com/Matanmoshes/deploy-k8s-with-openebs-metallb-istio.git /home/ubuntu/aws-k8s-terraform-automation
+  - chown -R ubuntu:ubuntu /home/ubuntu/deploy-k8s-with-openebs-metallb-istio

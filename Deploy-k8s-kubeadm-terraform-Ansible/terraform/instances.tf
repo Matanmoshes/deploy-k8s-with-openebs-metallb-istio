@@ -1,28 +1,3 @@
-# Bastion Host
-#resource "aws_instance" "bastion" {
-#  ami                    = var.ubuntu_ami
-#  instance_type          = var.bastion_instance_type
-#  subnet_id              = aws_subnet.public.id
-#  vpc_security_group_ids = [aws_security_group.public_sg.id]
-#  key_name               = var.key_pair_name
-#
-#  tags = {
-#    Name = "bastion-host"
-#  }
-#}
-
-# Elastic IP for Bastion Host
-#resource "aws_eip" "bastion_eip" {
-#  instance = aws_instance.bastion.id
-#  domain   = "vpc"
-
-#  depends_on = [aws_internet_gateway.gw]
-
-#  tags = {
-#    Name = "bastion-eip"
-#  }
-#}
-
 # Ansible Control Machine
 resource "aws_instance" "ansible_control" {
   ami                    = var.ubuntu_ami

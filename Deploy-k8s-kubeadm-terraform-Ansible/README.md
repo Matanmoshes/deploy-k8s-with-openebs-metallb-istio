@@ -20,22 +20,28 @@ In this project, I automated the creation of a Kubernetes cluster on AWS by orch
 Here's an overview of the project directory structure:
 
 ```
-aws-k8s-terraform-automation/
+├── Deploy-k8s-kubeadm-terraform-Ansible
+│   ├── README.md
+│   ├── ansible
+│   │   ├── ansible-setup.sh
+│   │   ├── ansible.cfg
+│   │   ├── inventory.ini
+│   │   ├── kubernetes-setup.yml
+│   │   ├── set-workernodes-kernel.yml
+│   │   ├── tamplate-worker.yml
+│   │   └── vars.yml
+│   └── terraform
+│       ├── ansible-setup.yaml
+│       ├── backend.tf
+│       ├── instances.tf
+│       ├── outputs.tf
+│       ├── security_groups.tf
+│       ├── terraform.tfstate
+│       ├── terraform.tfstate.backup
+│       ├── terraform.tfvars
+│       ├── variable.tf
+│       └── vpc.tf
 ├── README.md
-├── ansible
-│   ├── ansible-setup.sh
-│   ├── ansible.cfg
-│   ├── inventory.ini
-│   └── kubernetes-setup.yml
-└── terraform
-    ├── ansible-setup.yaml
-    ├── backend.tf
-    ├── instances.tf
-    ├── outputs.tf
-    ├── security_groups.tf
-    ├── terraform.tfvars
-    ├── variable.tf
-    └── vpc.tf
 ```
 
 ### Description of Directories and Files
@@ -68,12 +74,11 @@ Below is a high-level diagram of the AWS infrastructure and the deployment flow:
                                  [Public IP Address]
                                         |
                                         |
-                                   ┌───────────┐
-                                   │ Bastion   │
-                                   │   Host    │
-                                   └───────────┘
+                                   ┌────────────────────┐
+                                   │ Ansible Control VM │
+                                   └────────────────────┘
                                         |
-                         SSH over Public IP (Port 22)
+                         SSH over Private IP (Port 22)
                                         |
                              ───────────────────────
                              |                    |
@@ -86,20 +91,20 @@ Below is a high-level diagram of the AWS infrastructure and the deployment flow:
                 ┌──────────────────────────┐      |
                 |        10.0.0.0/16       |      |
                 |                          |      |
-        ┌──────────────────┐      ┌──────────────────┐
-        |  Public Subnet   |      |  Private Subnet  |
-        |   10.0.1.0/24    |      |   10.0.2.0/24    |
-        └──────────────────┘      └──────────────────┘
-                |                          |
-                |                          |
-        ┌─────────────┐             ┌───────────────────────┐
-        │ Bastion     │             │ Ansible Control VM    │
-        │   Host      │             │ Control Plane VM      │
-        └─────────────┘             │ Worker Node 1         │
-                                    │ Worker Node 2         │
-                                    └───────────────────────┘
-                |                          | 
-                |                          |
+           ┌──────────────────┐            |      |
+           |  Public Subnet   |            |      |
+           |   10.0.1.0/24    |            |      |
+           └──────────────────┘            |      |                                                   
+                |                          |      |
+                |                          |      |
+        ┌───────────────────┐            ┌───────────────────┐ 
+        │ Control Plane VM  |            | Worker Node 1 EBS | 
+        | Worker Node 1 VM  |------------| Worker Node 2 EBS |
+        | Worker Node 2 VM  |            | Worker Node 3 EBS |
+        | Worker Node 3 VM  |            └───────────────────┘  
+        └───────────────────┘           
+                |                           
+                |                          
          SSH via Private IP           Internal Networking
           (Port 22 allowed)             (Kubernetes Traffic)
                 |                          |
@@ -235,6 +240,7 @@ Before you begin, ensure you have met the following requirements:
    ip-10-0-2-144   Ready    control-plane   9m19s   v1.29.9
    ip-10-0-2-185   Ready    <none>          27s     v1.29.9
    ip-10-0-2-222   Ready    <none>          27s     v1.29.9
+   ip-10-0-2-213   Ready    <none>          27s     v1.29.9
    ```
 
 ---

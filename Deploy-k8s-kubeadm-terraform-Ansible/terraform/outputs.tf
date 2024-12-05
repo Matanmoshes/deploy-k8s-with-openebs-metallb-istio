@@ -1,8 +1,3 @@
-#output "bastion_public_ip" {
-#  description = "Public IP address of the bastion host"
-#  value       = aws_eip.bastion_eip.public_ip
-#}
-
 output "ansible_control_private_ip" {
   description = "Private IP address of the Ansible control machine"
   value       = aws_instance.ansible_control.private_ip
